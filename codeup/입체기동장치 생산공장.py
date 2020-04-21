@@ -1,8 +1,7 @@
-input_data = []
-input_data.append(int(input()))
+input_data = int(input())
 data = {}
 
-for x in range(0, input_data[0]):
+for x in range(0, input_data):
     a, b = input().split()
     data.update({int(a): int(b)})
 result = sorted(data)
