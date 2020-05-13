@@ -22,4 +22,4 @@
       while stack:
           print("POP > {}".format(pop()))
           
- ```
+  ```
