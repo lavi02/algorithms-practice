@@ -23,3 +23,25 @@
           print("POP > {}".format(pop()))
           
   ```
+  * 시간의 효율성 - 검색할 필요 없이 가장 위에 있는 데이터를 가져오고 넣음 -> 배열과 비슷한 효율
+  * 공간의 효율성 - 크기를 정해놓고 사용 -> 비슷한 효율
+
+* 큐(Queue)
+ * FIFO(First In First Out) - 처음으로 저장한 데이터를 사용
+ * 배열을 사용하여 만드는 것이 편리함
+ ```py
+ def put(item):
+     queue.append(item)
+
+ def get():
+     return queue.pop()
+ 
+ if __name__ == '__main__':
+     queue = []
+     
+     put(1)
+     put(2)
+     
+     print("현재 queue: ")
+     
+ ```
