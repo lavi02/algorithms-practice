@@ -43,5 +43,10 @@
      put(2)
      
      print("현재 queue: ")
+     print(queue)
      
+     while queue:
+       print("POP > {}".format(get()))
  ```
+ * 시간의 효율성 - 스택과 같이 검색 과정이 필요 없음
+ * 공간의 호율성 - 스택과는 다르게 원형 큐 형태로 사용함 -> 배열 크기와는 상관없이 돌면서 사용이 가능
