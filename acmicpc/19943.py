@@ -1,12 +1,12 @@
 import sys
-from collections import deque
+input = sys.stdin.readline
 
-result = []
 class ConvexHull:
     def __init__(self):
         self.la = [0] * 101001
         self.lb = [0] * 101001
         self.sz = 0
+        self.pointer = 0
 
     def cross(self, x, y):
         return (self.lb[y] - self.lb[x]) / (self.la[x] - self.la[y])
@@ -14,39 +14,42 @@ class ConvexHull:
     def insert(self, a, b):
         self.la[self.sz] = a
         self.lb[self.sz] = b
-        while self.sz > 1 and self.cross(self.sz - 2, self.sz - 1) > self.cross(self.sz - 1, self.sz):
+        self.sz += 1
+    
+        for _ in range(self.sz - 2, 0, -1):
+            if self.sz <= 1 or self.cross(self.sz - 2, self.sz - 1) <= self.cross(self.sz - 1, self.sz):
+                break
             self.la[self.sz - 1] = self.la[self.sz]
             self.lb[self.sz - 1] = self.lb[self.sz]
             self.sz -= 1
-        self.sz += 1
 
     def query(self, x):
-        lo, hi = 0, self.sz - 1
-        while lo < hi:
-            mid = (lo + hi) // 2
-            if self.cross(mid, mid + 1) <= x:
-                lo = mid + 1
-            else:
-                hi = mid
-        return self.la[lo] * x + self.lb[lo]
+        pointer = self.pointer
+        while pointer < self.sz - 1 and self.cross(pointer, pointer + 1) <= x:
+            pointer += 1
+        self.pointer = pointer
+        return self.la[pointer] * x + self.lb[pointer]
+
+
 
 mod = [".00", ".25", ".50", ".75"]
-for _ in range(int(sys.stdin.readline())):
-    n = int(sys.stdin.readline())
+for _ in range(int(input())):
+    n = int(input())
     px, py = [], []
     for _ in range(n):
-        x, y = map(int, sys.stdin.readline().split())
+        x, y = map(int, input().split())
         px.append(x)
         py.append(y)
 
-    stk = deque()
+    stk = []
     stk.append(0)
-
     for next in range(1, n):
         now = stk[-1]
         dx = (px[now] + px[next] - py[now] + py[next]) / 2.0
         if dx >= px[next]:
-            while dx >= px[next]:
+            for _ in range(n):
+                if dx < px[next]:
+                    break
                 stk.pop()
                 if len(stk) == 0:
                     break
@@ -61,7 +64,7 @@ for _ in range(int(sys.stdin.readline())):
     n = len(stk)
     lx, ly = [], []
 
-    while len(stk) != 0:
+    for _ in range(len(stk)):
         top = stk.pop()
         lx.append(px[top])
         ly.append(py[top])
@@ -77,10 +80,6 @@ for _ in range(int(sys.stdin.readline())):
         v = lx[i + 1] - ly[i + 1] if i + 1 < n else 0
         dp[i] = hull.query(u) + u * u
         hull.insert(-2 * v, v * v + dp[i])
-
-    data = str(dp[n - 1] // 4)+mod[dp[n - 1] % 4]
-    result.append(data)
-
-for i in result:
-    print(i)
-
+    
+    data = "".join([str(dp[n - 1] // 4), mod[dp[n - 1] % 4], "\n"])
+    sys.stdout.write(data)
