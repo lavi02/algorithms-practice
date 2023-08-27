@@ -14,19 +14,22 @@ class ConvexHull:
     def insert(self, a, b):
         self.la[self.sz] = a
         self.lb[self.sz] = b
-        self.sz += 1
-    
-        for _ in range(self.sz - 2, 0, -1):
-            if self.sz <= 1 or self.cross(self.sz - 2, self.sz - 1) <= self.cross(self.sz - 1, self.sz):
+        for _ in range(self.sz - 1, 0, -1):
+            if self.sz < 2 or self.cross(self.sz - 2, self.sz - 1) <= self.cross(self.sz - 1, self.sz):
                 break
             self.la[self.sz - 1] = self.la[self.sz]
             self.lb[self.sz - 1] = self.lb[self.sz]
             self.sz -= 1
+        self.sz += 1
+
 
     def query(self, x):
         pointer = self.pointer
-        while pointer < self.sz - 1 and self.cross(pointer, pointer + 1) <= x:
-            pointer += 1
+        for _ in range(self.sz - 1 - pointer):
+            if self.cross(pointer, pointer + 1) <= x:
+                pointer += 1
+            else:
+                break
         self.pointer = pointer
         return self.la[pointer] * x + self.lb[pointer]
 
